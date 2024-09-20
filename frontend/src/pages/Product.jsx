@@ -2,11 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext';
 import { assets } from '../assets/assets';
+import RelatedProducts from '../components/RelatedProducts';
 
 const Product = () => {
 
   const { productId } = useParams();
-  const { products, currency } = useContext(ShopContext)
+  const { products, currency, addToCart } = useContext(ShopContext)
   const [productData, setProductData] = useState(false)
   const [image, setImage] = useState('')
   const [size, setSize] = useState('')
@@ -17,7 +18,7 @@ const Product = () => {
       if (item._id === productId) {
         setProductData(item);
         setImage(item.image[0])
-        console.log(item)
+        // console.log(item)
         return null;
       }
     })
@@ -67,7 +68,7 @@ const Product = () => {
               ))}
             </div>
           </div>
-          <button className=' bg-black text-white px-8 py-3 text-sm active:bg-gray-700'>ADD TO CART</button>
+          <button onClick={() => addToCart(productData._id, size)} className=' bg-black text-white px-8 py-3 text-sm active:bg-gray-700'>ADD TO CART</button>
           <hr className='mt-8 sm:w-4/5' />
           <div className=' text-sm text-gray-500 mt-5 flex flex-col gap-1'>
             <p>100% Original product.</p>
@@ -77,7 +78,21 @@ const Product = () => {
         </div>
       </div>
 
-              
+      {/* Description & Review Section   */}
+      <div className=' mt-20'>
+        <div className=' flex'>
+          <b className=' border px-5 py-3 text-sm'>Desctiption</b>
+          <p className=' border px-5 py-3 text-sm'>Reviews (122)</p>
+        </div>
+        <div className=' flex flex-col gap-4 border px-6 py-6 text-sm text-gray-500'>
+          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Reprehenderit illo qui harum tempore consequatur non sit tempora obcaecati perspiciatis. Deleniti mollitia necessitatibus veniam, ratione numquam laudantium ab tempore dignissimos accusantium at quae et eligendi.</p>
+          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Numquam rerum rem nesciunt illum architecto corrupti, a maxime optio et ipsum veritatis assumenda saepe cumque, nisi repellat, iure facilis laudantium? Provident esse eum aliquid modi.</p>
+        </div>
+      </div>
+
+      {/* Display related products */}
+      <RelatedProducts category={productData.category} subCategory={productData.subCategory}/>
+     
 
     </div>
   ) : <div className=' opacity-0'></div>
