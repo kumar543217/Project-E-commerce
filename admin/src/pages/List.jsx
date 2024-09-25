@@ -6,7 +6,6 @@ import { toast } from 'react-toastify'
 const List = ({ token }) => {
 
   const [list, setList] = useState([])
-  console.log(list)
 
   const fetchList = async () => {
     try {

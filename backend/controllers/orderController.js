@@ -65,6 +65,10 @@
 
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
+import Stripe from 'stripe'
+
+// gateway initialize
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 // Placing order using COD Method
 const placeOrder = async (req, res) => {
@@ -111,6 +115,17 @@ const placeOrderRezorpay = async (req, res) => {
 // All Orders data for Admin Panel
 const allOrders = async (req, res) => {
 
+    try {
+
+        const orders = await orderModel.find({})
+        res.json({ success: true, orders })
+
+    } catch (error) {
+        console.log(error);
+        res.json({success:false, message:error.message})
+        
+    }
+
 }
 
 // User Order Data For Frontend
@@ -128,7 +143,16 @@ const userOrders = async (req, res) => {
 
 // Update orders status from Admin Panel
 const updateStatus = async (req, res) => {
+        try {
+            
+            const {orderId, status} = req.body
+            await orderModel.findByIdAndUpdate(orderId, {status})
+            res.json({success:true, message:"Status Updated"})
 
+        } catch (error) {
+            console.log(error);
+            res.json({success:false, message:error.message})
+        }
 }
 
 export {
